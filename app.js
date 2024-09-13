@@ -186,6 +186,32 @@ app.get('/getallLotto', (req, res) => {
     });
 });
 
+app.put('/updateLotto', (req, res) => {
+  const { lid, wid } = req.body;
+
+  console.log("Received data for update:", req.body); // Print received data
+
+  if (!lid || !wid) {
+    return res.status(400).json({ message: 'Incomplete data' });
+  }
+
+  // Validate wid
+
+  const sql = 'UPDATE lotto SET wid = ? WHERE lid = ?';
+  db.query(sql, [wid, lid], (err, result) => {
+    if (err) {
+      console.error('Database update error:', err);
+      return res.status(500).send(err);
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Lotto not found' });
+    }
+
+    res.status(200).json({ message: Lotto number updated successfully for id ${lid} });
+  });
+});
+
 app.put('/updateUser', (req, res) => {
   const { uid, userName, userEmail } = req.body;
 
