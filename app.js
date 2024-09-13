@@ -189,13 +189,14 @@ app.get('/getallLotto', (req, res) => {
 app.put('/updateLotto', (req, res) => {
   const { lid, wid } = req.body;
 
-  console.log("Received data for update:", req.body); // Print received data
-
   if (!lid || !wid) {
     return res.status(400).json({ message: 'Incomplete data' });
   }
 
-  // Validate wid
+  // ตรวจสอบว่า wid อยู่ในช่วงที่ถูกต้อง
+  if (![1, 2, 3, 4, 5].includes(wid)) {
+    return res.status(400).json({ message: 'Invalid wid value' });
+  }
 
   const sql = 'UPDATE lotto SET wid = ? WHERE lid = ?';
   db.query(sql, [wid, lid], (err, result) => {
